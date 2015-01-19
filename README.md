@@ -7,6 +7,6 @@ In the command line, cd into the rapidnet folder. Get the entire path the the ND
 
     ./rapidnet/dpcompiler/dpcompile <path-to-file>/<My-NDLog-Program>.olg
 
-On my computer, it would be
+On my computer, it would be 
 
-   ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/<FILE-NAME>.olg
+    ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/<FILE-NAME>.olg
