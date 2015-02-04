@@ -1,5 +1,7 @@
 # example-ndlog
 
+[Instructions on running NDLog programs](http://netdb.cis.upenn.edu/rapidnet/doxygen/html/rapidnet-ndlog-application.html)
+
 How to run a NDLog program from outside the folder
 --------------------------------------------------
 
