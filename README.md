@@ -20,5 +20,12 @@ Run
 Compiling Rapidnet and CVC4
 ---------------------------
 
-Instead of `./waf`, run
+Instead of 
+
+    ./waf configure
+    ./waf
+    
+Run
+
+    CXX=g++-mp-4.9 ./waf configure
     CXX=g++-mp-4.9 ./waf
