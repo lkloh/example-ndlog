@@ -29,3 +29,9 @@ Run
 
     CXX=g++-mp-4.9 ./waf configure
     CXX=g++-mp-4.9 ./waf
+
+Installing CVC4
+---------------
+
+   sudo port install -s cvc4 configure.compiler=macports-gcc-4.9
+   
