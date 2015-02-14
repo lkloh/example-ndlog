@@ -16,3 +16,9 @@ On my computer, it would be
 Run
 
     ./waf --run pingpong-test
+
+Compiling Rapidnet and CVC4
+---------------------------
+
+Instead of `./waf`, run
+    CXX=g++-mp-4.9 ./waf
