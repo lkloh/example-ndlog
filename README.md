@@ -13,6 +13,10 @@ On my computer, it would be
 
     ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/<FILE-NAME>.olg
 
+Getting proof obligations:    
+
+    ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/sbgp.olg
+
 Run
 
     ./waf --run pingpong-test
