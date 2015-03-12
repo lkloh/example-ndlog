@@ -3,7 +3,6 @@ materialize(onehop,infinity,infinity,keys(1,2)).
 materialize(twohops,infinity,infinity,keys(1,2)).
 materialize(twohops1,infinity,infinity,keys(1,2)).
 materialize(threehops,infinity,infinity,keys(1,2)).
-materialize(fourhops,infinity,infinity,keys(1,2)).
 
 r1 onehop(@Src, Dest, Cost) 
 	:- link(@Src, Dest, Cost).

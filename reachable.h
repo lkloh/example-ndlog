@@ -38,7 +38,6 @@ public:
   static const string D3REACHABLEMID;
   static const string D3REACHABLEMIDDELETE;
   static const string LINK;
-  static const string ONEHOP;
   static const string REACHABLE;
   static const string REACHABLEDELETE;
 
@@ -61,6 +60,8 @@ protected:
   virtual void DemuxRecv (Ptr<Tuple> tuple);
 
   virtual void D1Eca0Ins (Ptr<Tuple> link);
+
+  virtual void D1Eca0Del (Ptr<Tuple> link);
 
   virtual void D2Local1Eca0RemoteIns (Ptr<Tuple> d2Local1d2linkMidsend);
 

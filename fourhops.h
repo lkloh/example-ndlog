@@ -30,7 +30,6 @@ class Fourhops : public RapidNetApplicationBase
 {
 public:
   static const string FOURHOPS;
-  static const string FOURHOPSDELETE;
   static const string LINK;
   static const string ONEHOP;
   static const string R2LOCAL1R2ONEHOPMIDSEND;
@@ -46,11 +45,9 @@ public:
   static const string R5ONEHOPMID;
   static const string R5ONEHOPMIDDELETE;
   static const string R6LOCAL1R6TWOHOPS1MIDSEND;
-  static const string R6LOCAL2FOURHOPSSEND;
   static const string R6TWOHOPS1MID;
   static const string R6TWOHOPS1MIDDELETE;
   static const string R7LOCAL1R7ONEHOPMIDSEND;
-  static const string R7LOCAL2FOURHOPSSEND;
   static const string R7ONEHOPMID;
   static const string R7ONEHOPMIDDELETE;
   static const string THREEHOPS;
@@ -151,17 +148,9 @@ protected:
 
   virtual void R6Local1Eca0Del (Ptr<Tuple> twohops1);
 
-  virtual void R6Local2Eca0RemoteIns (Ptr<Tuple> r6Local2fourhopssend);
-
-  virtual void R6Local2Eca0RemoteDel (Ptr<Tuple> fourhopsDelete);
-
   virtual void R6Local2Eca0Ins (Ptr<Tuple> r6twohops1Mid);
 
-  virtual void R6Local2Eca0Del (Ptr<Tuple> r6twohops1Mid);
-
   virtual void R6Local2Eca1Ins (Ptr<Tuple> twohops);
-
-  virtual void R6Local2Eca1Del (Ptr<Tuple> twohops);
 
   virtual void R7Local1Eca0RemoteIns (Ptr<Tuple> r7Local1r7onehopMidsend);
 
@@ -171,15 +160,9 @@ protected:
 
   virtual void R7Local1Eca0Del (Ptr<Tuple> onehop);
 
-  virtual void R7Local2Eca0RemoteIns (Ptr<Tuple> r7Local2fourhopssend);
-
   virtual void R7Local2Eca0Ins (Ptr<Tuple> r7onehopMid);
 
-  virtual void R7Local2Eca0Del (Ptr<Tuple> r7onehopMid);
-
   virtual void R7Local2Eca1Ins (Ptr<Tuple> threehops);
-
-  virtual void R7Local2Eca1Del (Ptr<Tuple> threehops);
 
 };
 

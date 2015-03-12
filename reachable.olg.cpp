@@ -1,4 +1,5 @@
 materialize(link,infinity,infinity,keys(1,2)).
+materialize(reachable,infinity,infinity,keys(1,2)).
 
 d1 reachable(@Src, Dest, Cost) :-
 	link(@Src, Dest, Cost).

@@ -25,7 +25,6 @@ const string Reachable::D3LOCAL2REACHABLESEND = "d3Local2reachablesend";
 const string Reachable::D3REACHABLEMID = "d3reachableMid";
 const string Reachable::D3REACHABLEMIDDELETE = "d3reachableMidDelete";
 const string Reachable::LINK = "link";
-const string Reachable::ONEHOP = "onehop";
 const string Reachable::REACHABLE = "reachable";
 const string Reachable::REACHABLEDELETE = "reachableDelete";
 
@@ -109,6 +108,10 @@ Reachable::DemuxRecv (Ptr<Tuple> tuple)
   if (IsInsertEvent (tuple, LINK))
     {
       D1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, LINK))
+    {
+      D1Eca0Del (tuple);
     }
   if (IsRecvEvent (tuple, D2LOCAL1D2LINKMIDSEND))
     {
@@ -195,21 +198,35 @@ Reachable::D1Eca0Ins (Ptr<Tuple> link)
 
   Ptr<Tuple> result = link;
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_GT,
-      VarExpr::New ("link_attr3"),
-      ValueExpr::New (Int32Value::New (0)))));
-
   result = result->Project (
-    ONEHOP,
+    REACHABLE,
     strlist ("link_attr1",
       "link_attr2",
       "link_attr3"),
-    strlist ("onehop_attr1",
-      "onehop_attr2",
-      "onehop_attr3"));
+    strlist ("reachable_attr1",
+      "reachable_attr2",
+      "reachable_attr3"));
 
-  SendLocal (result);
+  Insert (result);
+}
+
+void
+Reachable::D1Eca0Del (Ptr<Tuple> link)
+{
+  RAPIDNET_LOG_INFO ("D1Eca0Del triggered");
+
+  Ptr<Tuple> result = link;
+
+  result = result->Project (
+    REACHABLE,
+    strlist ("link_attr1",
+      "link_attr2",
+      "link_attr3"),
+    strlist ("reachable_attr1",
+      "reachable_attr2",
+      "reachable_attr3"));
+
+  Delete (result);
 }
 
 void

@@ -32,11 +32,9 @@ public:
   static const string LINK;
   static const string ONEHOP;
   static const string R2LOCAL1R2LINKMIDSEND;
-  static const string R2LOCAL2TWOHOPSSEND;
   static const string R2LINKMID;
   static const string R2LINKMIDDELETE;
   static const string TWOHOPS;
-  static const string TWOHOPSDELETE;
 
   static TypeId GetTypeId (void);
 
@@ -68,17 +66,9 @@ protected:
 
   virtual void R2Local1Eca0Del (Ptr<Tuple> link);
 
-  virtual void R2Local2Eca0RemoteIns (Ptr<Tuple> r2Local2twohopssend);
-
-  virtual void R2Local2Eca0RemoteDel (Ptr<Tuple> twohopsDelete);
-
   virtual void R2Local2Eca0Ins (Ptr<Tuple> r2linkMid);
 
-  virtual void R2Local2Eca0Del (Ptr<Tuple> r2linkMid);
-
   virtual void R2Local2Eca1Ins (Ptr<Tuple> onehop);
-
-  virtual void R2Local2Eca1Del (Ptr<Tuple> onehop);
 
 };
 

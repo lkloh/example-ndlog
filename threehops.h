@@ -36,15 +36,12 @@ public:
   static const string R2LINKMID;
   static const string R2LINKMIDDELETE;
   static const string R3LOCAL1R3ONEHOPMIDSEND;
-  static const string R3LOCAL2THREEHOPSSEND;
   static const string R3ONEHOPMID;
   static const string R3ONEHOPMIDDELETE;
   static const string R4LOCAL1R4TWOHOPSMIDSEND;
-  static const string R4LOCAL2THREEHOPSSEND;
   static const string R4TWOHOPSMID;
   static const string R4TWOHOPSMIDDELETE;
   static const string THREEHOPS;
-  static const string THREEHOPSDELETE;
   static const string TWOHOPS;
   static const string TWOHOPSDELETE;
 
@@ -98,17 +95,9 @@ protected:
 
   virtual void R3Local1Eca0Del (Ptr<Tuple> onehop);
 
-  virtual void R3Local2Eca0RemoteIns (Ptr<Tuple> r3Local2threehopssend);
-
-  virtual void R3Local2Eca0RemoteDel (Ptr<Tuple> threehopsDelete);
-
   virtual void R3Local2Eca0Ins (Ptr<Tuple> r3onehopMid);
 
-  virtual void R3Local2Eca0Del (Ptr<Tuple> r3onehopMid);
-
   virtual void R3Local2Eca1Ins (Ptr<Tuple> twohops);
-
-  virtual void R3Local2Eca1Del (Ptr<Tuple> twohops);
 
   virtual void R4Local1Eca0RemoteIns (Ptr<Tuple> r4Local1r4twohopsMidsend);
 
@@ -118,15 +107,9 @@ protected:
 
   virtual void R4Local1Eca0Del (Ptr<Tuple> twohops);
 
-  virtual void R4Local2Eca0RemoteIns (Ptr<Tuple> r4Local2threehopssend);
-
   virtual void R4Local2Eca0Ins (Ptr<Tuple> r4twohopsMid);
 
-  virtual void R4Local2Eca0Del (Ptr<Tuple> r4twohopsMid);
-
   virtual void R4Local2Eca1Ins (Ptr<Tuple> onehop);
-
-  virtual void R4Local2Eca1Del (Ptr<Tuple> onehop);
 
 };
 

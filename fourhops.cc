@@ -17,7 +17,6 @@ using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::fourhops;
 
 const string Fourhops::FOURHOPS = "fourhops";
-const string Fourhops::FOURHOPSDELETE = "fourhopsDelete";
 const string Fourhops::LINK = "link";
 const string Fourhops::ONEHOP = "onehop";
 const string Fourhops::R2LOCAL1R2ONEHOPMIDSEND = "r2Local1r2onehopMidsend";
@@ -33,11 +32,9 @@ const string Fourhops::R5LOCAL2THREEHOPSSEND = "r5Local2threehopssend";
 const string Fourhops::R5ONEHOPMID = "r5onehopMid";
 const string Fourhops::R5ONEHOPMIDDELETE = "r5onehopMidDelete";
 const string Fourhops::R6LOCAL1R6TWOHOPS1MIDSEND = "r6Local1r6twohops1Midsend";
-const string Fourhops::R6LOCAL2FOURHOPSSEND = "r6Local2fourhopssend";
 const string Fourhops::R6TWOHOPS1MID = "r6twohops1Mid";
 const string Fourhops::R6TWOHOPS1MIDDELETE = "r6twohops1MidDelete";
 const string Fourhops::R7LOCAL1R7ONEHOPMIDSEND = "r7Local1r7onehopMidsend";
-const string Fourhops::R7LOCAL2FOURHOPSSEND = "r7Local2fourhopssend";
 const string Fourhops::R7ONEHOPMID = "r7onehopMid";
 const string Fourhops::R7ONEHOPMIDDELETE = "r7onehopMidDelete";
 const string Fourhops::THREEHOPS = "threehops";
@@ -99,10 +96,6 @@ void
 Fourhops::InitDatabase ()
 {
   //RapidNetApplicationBase::InitDatabase ();
-
-  AddRelationWithKeys (FOURHOPS, attrdeflist (
-    attrdef ("fourhops_attr1", IPV4),
-    attrdef ("fourhops_attr2", IPV4)));
 
   AddRelationWithKeys (LINK, attrdeflist (
     attrdef ("link_attr1", IPV4),
@@ -299,29 +292,13 @@ Fourhops::DemuxRecv (Ptr<Tuple> tuple)
     {
       R6Local1Eca0Del (tuple);
     }
-  if (IsRecvEvent (tuple, R6LOCAL2FOURHOPSSEND))
-    {
-      R6Local2Eca0RemoteIns (tuple);
-    }
-  if (IsRecvEvent (tuple, FOURHOPSDELETE))
-    {
-      R6Local2Eca0RemoteDel (tuple);
-    }
   if (IsInsertEvent (tuple, R6TWOHOPS1MID))
     {
       R6Local2Eca0Ins (tuple);
     }
-  if (IsDeleteEvent (tuple, R6TWOHOPS1MID))
-    {
-      R6Local2Eca0Del (tuple);
-    }
   if (IsInsertEvent (tuple, TWOHOPS))
     {
       R6Local2Eca1Ins (tuple);
-    }
-  if (IsDeleteEvent (tuple, TWOHOPS))
-    {
-      R6Local2Eca1Del (tuple);
     }
   if (IsRecvEvent (tuple, R7LOCAL1R7ONEHOPMIDSEND))
     {
@@ -339,25 +316,13 @@ Fourhops::DemuxRecv (Ptr<Tuple> tuple)
     {
       R7Local1Eca0Del (tuple);
     }
-  if (IsRecvEvent (tuple, R7LOCAL2FOURHOPSSEND))
-    {
-      R7Local2Eca0RemoteIns (tuple);
-    }
   if (IsInsertEvent (tuple, R7ONEHOPMID))
     {
       R7Local2Eca0Ins (tuple);
     }
-  if (IsDeleteEvent (tuple, R7ONEHOPMID))
-    {
-      R7Local2Eca0Del (tuple);
-    }
   if (IsInsertEvent (tuple, THREEHOPS))
     {
       R7Local2Eca1Ins (tuple);
-    }
-  if (IsDeleteEvent (tuple, THREEHOPS))
-    {
-      R7Local2Eca1Del (tuple);
     }
 }
 
@@ -1245,44 +1210,6 @@ Fourhops::R6Local1Eca0Del (Ptr<Tuple> twohops1)
 }
 
 void
-Fourhops::R6Local2Eca0RemoteIns (Ptr<Tuple> r6Local2fourhopssend)
-{
-  RAPIDNET_LOG_INFO ("R6Local2Eca0RemoteIns triggered");
-
-  Ptr<Tuple> result = r6Local2fourhopssend;
-
-  result = result->Project (
-    FOURHOPS,
-    strlist ("r6Local2fourhopssend_attr1",
-      "r6Local2fourhopssend_attr2",
-      "r6Local2fourhopssend_attr3"),
-    strlist ("fourhops_attr1",
-      "fourhops_attr2",
-      "fourhops_attr3"));
-
-  Insert (result);
-}
-
-void
-Fourhops::R6Local2Eca0RemoteDel (Ptr<Tuple> fourhopsDelete)
-{
-  RAPIDNET_LOG_INFO ("R6Local2Eca0RemoteDel triggered");
-
-  Ptr<Tuple> result = fourhopsDelete;
-
-  result = result->Project (
-    FOURHOPS,
-    strlist ("fourhopsDelete_attr1",
-      "fourhopsDelete_attr2",
-      "fourhopsDelete_attr3"),
-    strlist ("fourhops_attr1",
-      "fourhops_attr2",
-      "fourhops_attr3"));
-
-  Delete (result);
-}
-
-void
 Fourhops::R6Local2Eca0Ins (Ptr<Tuple> r6twohops1Mid)
 {
   RAPIDNET_LOG_INFO ("R6Local2Eca0Ins triggered");
@@ -1300,45 +1227,14 @@ Fourhops::R6Local2Eca0Ins (Ptr<Tuple> r6twohops1Mid)
       VarExpr::New ("twohops_attr3"))));
 
   result = result->Project (
-    R6LOCAL2FOURHOPSSEND,
+    FOURHOPS,
     strlist ("r6twohops1Mid_attr1",
       "twohops_attr2",
       "Cost",
       "r6twohops1Mid_attr1"),
-    strlist ("r6Local2fourhopssend_attr1",
-      "r6Local2fourhopssend_attr2",
-      "r6Local2fourhopssend_attr3",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Fourhops::R6Local2Eca0Del (Ptr<Tuple> r6twohops1Mid)
-{
-  RAPIDNET_LOG_INFO ("R6Local2Eca0Del triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (TWOHOPS)->Join (
-    r6twohops1Mid,
-    strlist ("twohops_attr1"),
-    strlist ("r6twohops1Mid_attr2"));
-
-  result->Assign (Assignor::New ("Cost",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("r6twohops1Mid_attr3"),
-      VarExpr::New ("twohops_attr3"))));
-
-  result = result->Project (
-    FOURHOPSDELETE,
-    strlist ("r6twohops1Mid_attr1",
-      "twohops_attr2",
-      "Cost",
-      "r6twohops1Mid_attr1"),
-    strlist ("fourhopsDelete_attr1",
-      "fourhopsDelete_attr2",
-      "fourhopsDelete_attr3",
+    strlist ("fourhops_attr1",
+      "fourhops_attr2",
+      "fourhops_attr3",
       RN_DEST));
 
   Send (result);
@@ -1362,45 +1258,14 @@ Fourhops::R6Local2Eca1Ins (Ptr<Tuple> twohops)
       VarExpr::New ("twohops_attr3"))));
 
   result = result->Project (
-    R6LOCAL2FOURHOPSSEND,
+    FOURHOPS,
     strlist ("r6twohops1Mid_attr1",
       "twohops_attr2",
       "Cost",
       "r6twohops1Mid_attr1"),
-    strlist ("r6Local2fourhopssend_attr1",
-      "r6Local2fourhopssend_attr2",
-      "r6Local2fourhopssend_attr3",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Fourhops::R6Local2Eca1Del (Ptr<Tuple> twohops)
-{
-  RAPIDNET_LOG_INFO ("R6Local2Eca1Del triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (R6TWOHOPS1MID)->Join (
-    twohops,
-    strlist ("r6twohops1Mid_attr2"),
-    strlist ("twohops_attr1"));
-
-  result->Assign (Assignor::New ("Cost",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("r6twohops1Mid_attr3"),
-      VarExpr::New ("twohops_attr3"))));
-
-  result = result->Project (
-    FOURHOPSDELETE,
-    strlist ("r6twohops1Mid_attr1",
-      "twohops_attr2",
-      "Cost",
-      "r6twohops1Mid_attr1"),
-    strlist ("fourhopsDelete_attr1",
-      "fourhopsDelete_attr2",
-      "fourhopsDelete_attr3",
+    strlist ("fourhops_attr1",
+      "fourhops_attr2",
+      "fourhops_attr3",
       RN_DEST));
 
   Send (result);
@@ -1487,25 +1352,6 @@ Fourhops::R7Local1Eca0Del (Ptr<Tuple> onehop)
 }
 
 void
-Fourhops::R7Local2Eca0RemoteIns (Ptr<Tuple> r7Local2fourhopssend)
-{
-  RAPIDNET_LOG_INFO ("R7Local2Eca0RemoteIns triggered");
-
-  Ptr<Tuple> result = r7Local2fourhopssend;
-
-  result = result->Project (
-    FOURHOPS,
-    strlist ("r7Local2fourhopssend_attr1",
-      "r7Local2fourhopssend_attr2",
-      "r7Local2fourhopssend_attr3"),
-    strlist ("fourhops_attr1",
-      "fourhops_attr2",
-      "fourhops_attr3"));
-
-  Insert (result);
-}
-
-void
 Fourhops::R7Local2Eca0Ins (Ptr<Tuple> r7onehopMid)
 {
   RAPIDNET_LOG_INFO ("R7Local2Eca0Ins triggered");
@@ -1523,45 +1369,14 @@ Fourhops::R7Local2Eca0Ins (Ptr<Tuple> r7onehopMid)
       VarExpr::New ("threehops_attr3"))));
 
   result = result->Project (
-    R7LOCAL2FOURHOPSSEND,
+    FOURHOPS,
     strlist ("r7onehopMid_attr1",
       "threehops_attr2",
       "Cost",
       "r7onehopMid_attr1"),
-    strlist ("r7Local2fourhopssend_attr1",
-      "r7Local2fourhopssend_attr2",
-      "r7Local2fourhopssend_attr3",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Fourhops::R7Local2Eca0Del (Ptr<Tuple> r7onehopMid)
-{
-  RAPIDNET_LOG_INFO ("R7Local2Eca0Del triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (THREEHOPS)->Join (
-    r7onehopMid,
-    strlist ("threehops_attr1"),
-    strlist ("r7onehopMid_attr2"));
-
-  result->Assign (Assignor::New ("Cost",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("r7onehopMid_attr3"),
-      VarExpr::New ("threehops_attr3"))));
-
-  result = result->Project (
-    FOURHOPSDELETE,
-    strlist ("r7onehopMid_attr1",
-      "threehops_attr2",
-      "Cost",
-      "r7onehopMid_attr1"),
-    strlist ("fourhopsDelete_attr1",
-      "fourhopsDelete_attr2",
-      "fourhopsDelete_attr3",
+    strlist ("fourhops_attr1",
+      "fourhops_attr2",
+      "fourhops_attr3",
       RN_DEST));
 
   Send (result);
@@ -1585,45 +1400,14 @@ Fourhops::R7Local2Eca1Ins (Ptr<Tuple> threehops)
       VarExpr::New ("threehops_attr3"))));
 
   result = result->Project (
-    R7LOCAL2FOURHOPSSEND,
+    FOURHOPS,
     strlist ("r7onehopMid_attr1",
       "threehops_attr2",
       "Cost",
       "r7onehopMid_attr1"),
-    strlist ("r7Local2fourhopssend_attr1",
-      "r7Local2fourhopssend_attr2",
-      "r7Local2fourhopssend_attr3",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Fourhops::R7Local2Eca1Del (Ptr<Tuple> threehops)
-{
-  RAPIDNET_LOG_INFO ("R7Local2Eca1Del triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (R7ONEHOPMID)->Join (
-    threehops,
-    strlist ("r7onehopMid_attr2"),
-    strlist ("threehops_attr1"));
-
-  result->Assign (Assignor::New ("Cost",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("r7onehopMid_attr3"),
-      VarExpr::New ("threehops_attr3"))));
-
-  result = result->Project (
-    FOURHOPSDELETE,
-    strlist ("r7onehopMid_attr1",
-      "threehops_attr2",
-      "Cost",
-      "r7onehopMid_attr1"),
-    strlist ("fourhopsDelete_attr1",
-      "fourhopsDelete_attr2",
-      "fourhopsDelete_attr3",
+    strlist ("fourhops_attr1",
+      "fourhops_attr2",
+      "fourhops_attr3",
       RN_DEST));
 
   Send (result);

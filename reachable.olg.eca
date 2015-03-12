@@ -1,4 +1,5 @@
-ECA Rule d1Eca0Ins ACTION_LOCAL_SEND<onehop(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost)>, Cost > 0.
+ECA Rule d1Eca0Ins ACTION_ADD<reachable(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost)>.
+ECA Rule d1Eca0Del ACTION_DELETE<reachable(@Src, Dest, Cost)> :- EVENT_DELETE<link(@Src, Dest, Cost)>.
 ECA Rule d2Local1Eca0RemoteIns ACTION_ADD<d2linkMid(Src, @Mid, Cost1)> :- EVENT_RECV<d2Local1d2linkMidsend(Src, @Mid, Cost1)>.
 ECA Rule d2Local1Eca0RemoteDel ACTION_DELETE<d2linkMid(Src, @Mid, Cost1)> :- EVENT_RECV<d2linkMidDelete(Src, @Mid, Cost1)>.
 ECA Rule d2Local1Eca0Ins ACTION_REMOTE_SEND<d2Local1d2linkMidsend(Src, @Mid, Cost1)> :- EVENT_INSERT<link(@Src, Mid, Cost1)>.
