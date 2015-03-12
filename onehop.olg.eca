@@ -1,2 +1,1 @@
-ECA Rule r1Eca0Ins ACTION_ADD<onehop(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost)>, Cost > 0.
-ECA Rule r1Eca0Del ACTION_DELETE<onehop(@Src, Dest, Cost)> :- EVENT_DELETE<link(@Src, Dest, Cost)>, Cost > 0.
+ECA Rule r1Eca0Ins ACTION_LOCAL_SEND<onehop(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost)>, Cost > 0.

@@ -52,8 +52,6 @@ protected:
 
   virtual void R1Eca0Ins (Ptr<Tuple> link);
 
-  virtual void R1Eca0Del (Ptr<Tuple> link);
-
 };
 
 } // namespace onehop

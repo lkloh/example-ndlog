@@ -46,3 +46,7 @@ rs4 packet(@OutNei, S, SrcMac, DstMac) :-
 	inPort(@S, InNei, InPort),
 	outPort(@S, OutNei, OutPort),	
 	flowEntry(@S, DstMac, OutPort).
+
+
+
+	

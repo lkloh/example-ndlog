@@ -77,10 +77,6 @@ Onehop::InitDatabase ()
     attrdef ("link_attr1", IPV4),
     attrdef ("link_attr2", IPV4)));
 
-  AddRelationWithKeys (ONEHOP, attrdeflist (
-    attrdef ("onehop_attr1", IPV4),
-    attrdef ("onehop_attr2", IPV4)));
-
 }
 
 void
@@ -91,10 +87,6 @@ Onehop::DemuxRecv (Ptr<Tuple> tuple)
   if (IsInsertEvent (tuple, LINK))
     {
       R1Eca0Ins (tuple);
-    }
-  if (IsDeleteEvent (tuple, LINK))
-    {
-      R1Eca0Del (tuple);
     }
 }
 
@@ -119,30 +111,6 @@ Onehop::R1Eca0Ins (Ptr<Tuple> link)
       "onehop_attr2",
       "onehop_attr3"));
 
-  Insert (result);
-}
-
-void
-Onehop::R1Eca0Del (Ptr<Tuple> link)
-{
-  RAPIDNET_LOG_INFO ("R1Eca0Del triggered");
-
-  Ptr<Tuple> result = link;
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_GT,
-      VarExpr::New ("link_attr3"),
-      ValueExpr::New (Int32Value::New (0)))));
-
-  result = result->Project (
-    ONEHOP,
-    strlist ("link_attr1",
-      "link_attr2",
-      "link_attr3"),
-    strlist ("onehop_attr1",
-      "onehop_attr2",
-      "onehop_attr3"));
-
-  Delete (result);
+  SendLocal (result);
 }
 

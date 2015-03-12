@@ -1,3 +1,5 @@
+
+
 // The predicates in the body and head of traditional Datalog rules are relations, 
 // and we refer to them interchangeably as predicates, relations or tables. 
 // Each relation has a primary key, which consists of a set of fields that uniquely identify 
@@ -6,6 +8,9 @@
 //
 // materialize(name, lifetime, size, primary keys)
 // If the primary key is the empty set (), then the primary key is the full set of fields in the relation
+
+#define TEST 10000
+
 materialize(tLink, infinity, infinity, keys(1,2)).
 
 // Every 1 second, node "Src" will send out a ePing event to its neighbors, i.e. node "Next"
@@ -13,7 +18,7 @@ r1  ePing(@Next, Src):-
     periodic(@Src, E, M), 
     tLink(@Src, Next),
     M == 1,
-    E == "n".
+    E == TEST.
 
 r2 ePing(@Next, Src):-
     path(@Src, Next).
