@@ -13,6 +13,10 @@ On my computer, it would be
 
     ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/<FILE-NAME>.olg
 
+Getting proof obligations:    
+
+    ./rapidnet/dpcompiler/dpcompile /Users/lkloh/example-ndlog/sbgp.olg
+
 Run
 
     ./waf --run pingpong-test
@@ -34,4 +38,10 @@ Installing CVC4
 ---------------
 
     sudo port install -s cvc4 configure.compiler=macports-gcc-4.9
+    
+Testing the program alone
+-------------------------
+
+    ./rapidnet/compiler/compile <path-to-program>/PROGRAM
+    ./rapidnet/compiler/compile /Users/lkloh/example-ndlog/onehop.olg
    
