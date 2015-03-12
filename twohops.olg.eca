@@ -1,0 +1,6 @@
+ECA Rule r1Eca0Ins ACTION_ADD<onehop(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost)>, Cost > 0.
+ECA Rule r1Eca0Del ACTION_DELETE<onehop(@Src, Dest, Cost)> :- EVENT_DELETE<link(@Src, Dest, Cost)>, Cost > 0.
+ECA Rule r2Eca0Ins ACTION_ADD<twohops(@Src, Dest, Cost)> :- EVENT_INSERT<link(@Src, Dest, Cost1)>, onehop(@Src, Dest, Cost2), Cost1 == Cost1+ Cost2.
+ECA Rule r2Eca0Del ACTION_DELETE<twohops(@Src, Dest, Cost)> :- EVENT_DELETE<link(@Src, Dest, Cost1)>, onehop(@Src, Dest, Cost2), Cost1 == Cost1+ Cost2.
+ECA Rule r2Eca1Ins ACTION_ADD<twohops(@Src, Dest, Cost)> :- EVENT_INSERT<onehop(@Src, Dest, Cost2)>, link(@Src, Dest, Cost1), Cost1 == Cost1+ Cost2.
+ECA Rule r2Eca1Del ACTION_DELETE<twohops(@Src, Dest, Cost)> :- EVENT_DELETE<onehop(@Src, Dest, Cost2)>, link(@Src, Dest, Cost1), Cost1 == Cost1+ Cost2.

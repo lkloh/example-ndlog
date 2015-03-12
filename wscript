@@ -1,13 +1,13 @@
 ## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 
 def build(bld):
-    module = bld.create_ns3_module('onehop', ['internet-stack'])
+    module = bld.create_ns3_module('twohops', ['internet-stack'])
     module.source = [
-        'onehop.cc',
+        'twohops.cc',
         ]
     headers = bld.new_task_gen('ns3header')
-    headers.module = 'onehop'
+    headers.module = 'twohops'
     headers.source = [
-        'onehop.h',
-        'onehop-helper.h',
+        'twohops.h',
+        'twohops-helper.h',
         ]
