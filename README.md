@@ -38,4 +38,10 @@ Installing CVC4
 ---------------
 
     sudo port install -s cvc4 configure.compiler=macports-gcc-4.9
+    
+Testing the program alone
+-------------------------
+
+    ./rapidnet/compiler/compile <path-to-program>/PROGRAM
+    ./rapidnet/compiler/compile /Users/lkloh/example-ndlog/onehop.olg
    
