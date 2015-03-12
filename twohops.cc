@@ -18,7 +18,12 @@ using namespace ns3::rapidnet::twohops;
 
 const string Twohops::LINK = "link";
 const string Twohops::ONEHOP = "onehop";
+const string Twohops::R2LOCAL1R2LINKMIDSEND = "r2Local1r2linkMidsend";
+const string Twohops::R2LOCAL2TWOHOPSSEND = "r2Local2twohopssend";
+const string Twohops::R2LINKMID = "r2linkMid";
+const string Twohops::R2LINKMIDDELETE = "r2linkMidDelete";
 const string Twohops::TWOHOPS = "twohops";
+const string Twohops::TWOHOPSDELETE = "twohopsDelete";
 
 NS_LOG_COMPONENT_DEFINE ("Twohops");
 NS_OBJECT_ENSURE_REGISTERED (Twohops);
@@ -82,6 +87,10 @@ Twohops::InitDatabase ()
     attrdef ("onehop_attr1", IPV4),
     attrdef ("onehop_attr2", IPV4)));
 
+  AddRelationWithKeys (R2LINKMID, attrdeflist (
+    attrdef ("r2linkMid_attr1", IPV4),
+    attrdef ("r2linkMid_attr2", IPV4)));
+
   AddRelationWithKeys (TWOHOPS, attrdeflist (
     attrdef ("twohops_attr1", IPV4),
     attrdef ("twohops_attr2", IPV4)));
@@ -101,21 +110,45 @@ Twohops::DemuxRecv (Ptr<Tuple> tuple)
     {
       R1Eca0Del (tuple);
     }
+  if (IsRecvEvent (tuple, R2LOCAL1R2LINKMIDSEND))
+    {
+      R2Local1Eca0RemoteIns (tuple);
+    }
+  if (IsRecvEvent (tuple, R2LINKMIDDELETE))
+    {
+      R2Local1Eca0RemoteDel (tuple);
+    }
   if (IsInsertEvent (tuple, LINK))
     {
-      R2Eca0Ins (tuple);
+      R2Local1Eca0Ins (tuple);
     }
   if (IsDeleteEvent (tuple, LINK))
     {
-      R2Eca0Del (tuple);
+      R2Local1Eca0Del (tuple);
+    }
+  if (IsRecvEvent (tuple, R2LOCAL2TWOHOPSSEND))
+    {
+      R2Local2Eca0RemoteIns (tuple);
+    }
+  if (IsRecvEvent (tuple, TWOHOPSDELETE))
+    {
+      R2Local2Eca0RemoteDel (tuple);
+    }
+  if (IsInsertEvent (tuple, R2LINKMID))
+    {
+      R2Local2Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, R2LINKMID))
+    {
+      R2Local2Eca0Del (tuple);
     }
   if (IsInsertEvent (tuple, ONEHOP))
     {
-      R2Eca1Ins (tuple);
+      R2Local2Eca1Ins (tuple);
     }
   if (IsDeleteEvent (tuple, ONEHOP))
     {
-      R2Eca1Del (tuple);
+      R2Local2Eca1Del (tuple);
     }
 }
 
@@ -168,27 +201,97 @@ Twohops::R1Eca0Del (Ptr<Tuple> link)
 }
 
 void
-Twohops::R2Eca0Ins (Ptr<Tuple> link)
+Twohops::R2Local1Eca0RemoteIns (Ptr<Tuple> r2Local1r2linkMidsend)
 {
-  RAPIDNET_LOG_INFO ("R2Eca0Ins triggered");
+  RAPIDNET_LOG_INFO ("R2Local1Eca0RemoteIns triggered");
 
-  Ptr<RelationBase> result;
+  Ptr<Tuple> result = r2Local1r2linkMidsend;
 
-  result = GetRelation (ONEHOP)->Join (
-    link,
-    strlist ("onehop_attr2", "onehop_attr1"),
-    strlist ("link_attr2", "link_attr1"));
+  result = result->Project (
+    R2LINKMID,
+    strlist ("r2Local1r2linkMidsend_attr1",
+      "r2Local1r2linkMidsend_attr2",
+      "r2Local1r2linkMidsend_attr3"),
+    strlist ("r2linkMid_attr1",
+      "r2linkMid_attr2",
+      "r2linkMid_attr3"));
 
-  result->Assign (Assignor::New ("Cost",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("link_attr3"),
-      VarExpr::New ("onehop_attr3"))));
+  Insert (result);
+}
+
+void
+Twohops::R2Local1Eca0RemoteDel (Ptr<Tuple> r2linkMidDelete)
+{
+  RAPIDNET_LOG_INFO ("R2Local1Eca0RemoteDel triggered");
+
+  Ptr<Tuple> result = r2linkMidDelete;
+
+  result = result->Project (
+    R2LINKMID,
+    strlist ("r2linkMidDelete_attr1",
+      "r2linkMidDelete_attr2",
+      "r2linkMidDelete_attr3"),
+    strlist ("r2linkMid_attr1",
+      "r2linkMid_attr2",
+      "r2linkMid_attr3"));
+
+  Delete (result);
+}
+
+void
+Twohops::R2Local1Eca0Ins (Ptr<Tuple> link)
+{
+  RAPIDNET_LOG_INFO ("R2Local1Eca0Ins triggered");
+
+  Ptr<Tuple> result = link;
+
+  result = result->Project (
+    R2LOCAL1R2LINKMIDSEND,
+    strlist ("link_attr1",
+      "link_attr2",
+      "link_attr3",
+      "link_attr2"),
+    strlist ("r2Local1r2linkMidsend_attr1",
+      "r2Local1r2linkMidsend_attr2",
+      "r2Local1r2linkMidsend_attr3",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Twohops::R2Local1Eca0Del (Ptr<Tuple> link)
+{
+  RAPIDNET_LOG_INFO ("R2Local1Eca0Del triggered");
+
+  Ptr<Tuple> result = link;
+
+  result = result->Project (
+    R2LINKMIDDELETE,
+    strlist ("link_attr1",
+      "link_attr2",
+      "link_attr3",
+      "link_attr2"),
+    strlist ("r2linkMidDelete_attr1",
+      "r2linkMidDelete_attr2",
+      "r2linkMidDelete_attr3",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Twohops::R2Local2Eca0RemoteIns (Ptr<Tuple> r2Local2twohopssend)
+{
+  RAPIDNET_LOG_INFO ("R2Local2Eca0RemoteIns triggered");
+
+  Ptr<Tuple> result = r2Local2twohopssend;
 
   result = result->Project (
     TWOHOPS,
-    strlist ("link_attr1",
-      "link_attr2",
-      "Cost"),
+    strlist ("r2Local2twohopssend_attr1",
+      "r2Local2twohopssend_attr2",
+      "r2Local2twohopssend_attr3"),
     strlist ("twohops_attr1",
       "twohops_attr2",
       "twohops_attr3"));
@@ -197,89 +300,145 @@ Twohops::R2Eca0Ins (Ptr<Tuple> link)
 }
 
 void
-Twohops::R2Eca0Del (Ptr<Tuple> link)
+Twohops::R2Local2Eca0RemoteDel (Ptr<Tuple> twohopsDelete)
 {
-  RAPIDNET_LOG_INFO ("R2Eca0Del triggered");
+  RAPIDNET_LOG_INFO ("R2Local2Eca0RemoteDel triggered");
+
+  Ptr<Tuple> result = twohopsDelete;
+
+  result = result->Project (
+    TWOHOPS,
+    strlist ("twohopsDelete_attr1",
+      "twohopsDelete_attr2",
+      "twohopsDelete_attr3"),
+    strlist ("twohops_attr1",
+      "twohops_attr2",
+      "twohops_attr3"));
+
+  Delete (result);
+}
+
+void
+Twohops::R2Local2Eca0Ins (Ptr<Tuple> r2linkMid)
+{
+  RAPIDNET_LOG_INFO ("R2Local2Eca0Ins triggered");
 
   Ptr<RelationBase> result;
 
   result = GetRelation (ONEHOP)->Join (
-    link,
-    strlist ("onehop_attr2", "onehop_attr1"),
-    strlist ("link_attr2", "link_attr1"));
+    r2linkMid,
+    strlist ("onehop_attr1"),
+    strlist ("r2linkMid_attr2"));
 
   result->Assign (Assignor::New ("Cost",
     Operation::New (RN_PLUS,
-      VarExpr::New ("link_attr3"),
+      VarExpr::New ("r2linkMid_attr3"),
       VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
-    TWOHOPS,
-    strlist ("link_attr1",
-      "link_attr2",
-      "Cost"),
-    strlist ("twohops_attr1",
-      "twohops_attr2",
-      "twohops_attr3"));
+    R2LOCAL2TWOHOPSSEND,
+    strlist ("r2linkMid_attr1",
+      "onehop_attr2",
+      "Cost",
+      "r2linkMid_attr1"),
+    strlist ("r2Local2twohopssend_attr1",
+      "r2Local2twohopssend_attr2",
+      "r2Local2twohopssend_attr3",
+      RN_DEST));
 
-  Delete (result);
+  Send (result);
 }
 
 void
-Twohops::R2Eca1Ins (Ptr<Tuple> onehop)
+Twohops::R2Local2Eca0Del (Ptr<Tuple> r2linkMid)
 {
-  RAPIDNET_LOG_INFO ("R2Eca1Ins triggered");
+  RAPIDNET_LOG_INFO ("R2Local2Eca0Del triggered");
 
   Ptr<RelationBase> result;
 
-  result = GetRelation (LINK)->Join (
-    onehop,
-    strlist ("link_attr2", "link_attr1"),
-    strlist ("onehop_attr2", "onehop_attr1"));
+  result = GetRelation (ONEHOP)->Join (
+    r2linkMid,
+    strlist ("onehop_attr1"),
+    strlist ("r2linkMid_attr2"));
 
   result->Assign (Assignor::New ("Cost",
     Operation::New (RN_PLUS,
-      VarExpr::New ("link_attr3"),
+      VarExpr::New ("r2linkMid_attr3"),
       VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
-    TWOHOPS,
-    strlist ("onehop_attr1",
+    TWOHOPSDELETE,
+    strlist ("r2linkMid_attr1",
       "onehop_attr2",
-      "Cost"),
-    strlist ("twohops_attr1",
-      "twohops_attr2",
-      "twohops_attr3"));
+      "Cost",
+      "r2linkMid_attr1"),
+    strlist ("twohopsDelete_attr1",
+      "twohopsDelete_attr2",
+      "twohopsDelete_attr3",
+      RN_DEST));
 
-  Insert (result);
+  Send (result);
 }
 
 void
-Twohops::R2Eca1Del (Ptr<Tuple> onehop)
+Twohops::R2Local2Eca1Ins (Ptr<Tuple> onehop)
 {
-  RAPIDNET_LOG_INFO ("R2Eca1Del triggered");
+  RAPIDNET_LOG_INFO ("R2Local2Eca1Ins triggered");
 
   Ptr<RelationBase> result;
 
-  result = GetRelation (LINK)->Join (
+  result = GetRelation (R2LINKMID)->Join (
     onehop,
-    strlist ("link_attr2", "link_attr1"),
-    strlist ("onehop_attr2", "onehop_attr1"));
+    strlist ("r2linkMid_attr2"),
+    strlist ("onehop_attr1"));
 
   result->Assign (Assignor::New ("Cost",
     Operation::New (RN_PLUS,
-      VarExpr::New ("link_attr3"),
+      VarExpr::New ("r2linkMid_attr3"),
       VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
-    TWOHOPS,
-    strlist ("onehop_attr1",
+    R2LOCAL2TWOHOPSSEND,
+    strlist ("r2linkMid_attr1",
       "onehop_attr2",
-      "Cost"),
-    strlist ("twohops_attr1",
-      "twohops_attr2",
-      "twohops_attr3"));
+      "Cost",
+      "r2linkMid_attr1"),
+    strlist ("r2Local2twohopssend_attr1",
+      "r2Local2twohopssend_attr2",
+      "r2Local2twohopssend_attr3",
+      RN_DEST));
 
-  Delete (result);
+  Send (result);
+}
+
+void
+Twohops::R2Local2Eca1Del (Ptr<Tuple> onehop)
+{
+  RAPIDNET_LOG_INFO ("R2Local2Eca1Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (R2LINKMID)->Join (
+    onehop,
+    strlist ("r2linkMid_attr2"),
+    strlist ("onehop_attr1"));
+
+  result->Assign (Assignor::New ("Cost",
+    Operation::New (RN_PLUS,
+      VarExpr::New ("r2linkMid_attr3"),
+      VarExpr::New ("onehop_attr3"))));
+
+  result = result->Project (
+    TWOHOPSDELETE,
+    strlist ("r2linkMid_attr1",
+      "onehop_attr2",
+      "Cost",
+      "r2linkMid_attr1"),
+    strlist ("twohopsDelete_attr1",
+      "twohopsDelete_attr2",
+      "twohopsDelete_attr3",
+      RN_DEST));
+
+  Send (result);
 }
 

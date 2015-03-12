@@ -31,6 +31,10 @@ class Threehops : public RapidNetApplicationBase
 public:
   static const string LINK;
   static const string ONEHOP;
+  static const string R2LOCAL1R2LINKMIDSEND;
+  static const string R2LOCAL2TWOHOPSSEND;
+  static const string R2LINKMID;
+  static const string R2LINKMIDDELETE;
   static const string R3LOCAL1R3ONEHOPMIDSEND;
   static const string R3LOCAL2THREEHOPSSEND;
   static const string R3ONEHOPMID;
@@ -42,6 +46,7 @@ public:
   static const string THREEHOPS;
   static const string THREEHOPSDELETE;
   static const string TWOHOPS;
+  static const string TWOHOPSDELETE;
 
   static TypeId GetTypeId (void);
 
@@ -65,13 +70,25 @@ protected:
 
   virtual void R1Eca0Del (Ptr<Tuple> link);
 
-  virtual void R2Eca0Ins (Ptr<Tuple> link);
+  virtual void R2Local1Eca0RemoteIns (Ptr<Tuple> r2Local1r2linkMidsend);
 
-  virtual void R2Eca0Del (Ptr<Tuple> link);
+  virtual void R2Local1Eca0RemoteDel (Ptr<Tuple> r2linkMidDelete);
 
-  virtual void R2Eca1Ins (Ptr<Tuple> onehop);
+  virtual void R2Local1Eca0Ins (Ptr<Tuple> link);
 
-  virtual void R2Eca1Del (Ptr<Tuple> onehop);
+  virtual void R2Local1Eca0Del (Ptr<Tuple> link);
+
+  virtual void R2Local2Eca0RemoteIns (Ptr<Tuple> r2Local2twohopssend);
+
+  virtual void R2Local2Eca0RemoteDel (Ptr<Tuple> twohopsDelete);
+
+  virtual void R2Local2Eca0Ins (Ptr<Tuple> r2linkMid);
+
+  virtual void R2Local2Eca0Del (Ptr<Tuple> r2linkMid);
+
+  virtual void R2Local2Eca1Ins (Ptr<Tuple> onehop);
+
+  virtual void R2Local2Eca1Del (Ptr<Tuple> onehop);
 
   virtual void R3Local1Eca0RemoteIns (Ptr<Tuple> r3Local1r3onehopMidsend);
 

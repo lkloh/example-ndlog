@@ -1,7 +1,68 @@
-r1 onehop(@x,y,c) :- link(@x,y,c).
-r2 twohops(@x,y,c) :- onehop(@x,z,c1), link(@z,y,c2), c:=c1+c2, c > 3.
-r3 twohops(@x,y,c) :- link(@x,z,c1), onehop(@z,y,c2), c:=c1+c2.
-r4 twohops1(@x,y,c) :- twohops(@x,y,c).
-r5 threehops(@x,y,c) :- onehop(@x,z,c1), twohops(@z,y,c2), c:=c1+c2
-r6 fourhops(@x,y,c) :- twohops1(@x,z,c1), twohops(@z,y,c2), c:=c1+c2
-r7 fourhops(@x,y,c) :- onehop(@x,z,c1), threehops(@z,y,c2), c:=c1+c2.
+materialize(link,infinity,infinity,keys(1,2)).
+materialize(onehop,infinity,infinity,keys(1,2)).
+materialize(twohops,infinity,infinity,keys(1,2)).
+materialize(twohops1,infinity,infinity,keys(1,2)).
+materialize(threehops,infinity,infinity,keys(1,2)).
+materialize(fourhops,infinity,infinity,keys(1,2)).
+
+r1 onehop(@Src, Dest, Cost) 
+	:- link(@Src, Dest, Cost).
+
+r2 twohops(@Src, Dest, Cost) :- 
+	onehop(@Src, Mid, Cost1), 
+	link(@Mid, Dest, Cost2), 
+	Cost := Cost1 + Cost2, 
+	Cost > 3.
+
+r3 twohops(@Src, Dest, Cost) :- 
+	link(@Src, Mid, Cost1), 
+	onehop(@Mid, Dest, Cost2), 
+	Cost := Cost1 + Cost2.
+
+r4 twohops1(@Src, Dest, Cost) :- 
+	twohops(@Src, Dest, Cost).
+
+r5 threehops(@Src, Dest, Cost) :- 
+	onehop(@Src, Mid, Cost1), 
+	twohops(@Mid, Dest, Cost2), 
+	Cost := Cost1 + Cost2.
+
+r6 fourhops(@Src, Dest, Cost) :- 
+	twohops1(@Src, Mid, Cost1), 
+	twohops(@Mid, Dest, Cost2), 
+	Cost := Cost1 + Cost2.
+
+r7 fourhops(@Src, Dest, Cost) :- 
+	onehop(@Src, Mid, Cost1), 
+	threehops(@Mid, Dest, Cost2), 
+	Cost := Cost1 + Cost2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
