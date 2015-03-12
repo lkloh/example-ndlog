@@ -9,4 +9,6 @@ r1 onehop(@Src, Dest, Cost) :-
 r2 twohops(@Src, Dest, Cost) :-
 	link(@Src, Dest, Cost1),
 	onehop(@Src, Dest, Cost2),
-	Cost1 == Cost1 + Cost2.
+	Cost := Cost1 + Cost2.
+
+

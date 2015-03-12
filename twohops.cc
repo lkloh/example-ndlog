@@ -179,18 +179,16 @@ Twohops::R2Eca0Ins (Ptr<Tuple> link)
     strlist ("onehop_attr2", "onehop_attr1"),
     strlist ("link_attr2", "link_attr1"));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
+  result->Assign (Assignor::New ("Cost",
+    Operation::New (RN_PLUS,
       VarExpr::New ("link_attr3"),
-      Operation::New (RN_PLUS,
-        VarExpr::New ("link_attr3"),
-        VarExpr::New ("onehop_attr3")))));
+      VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
     TWOHOPS,
     strlist ("link_attr1",
       "link_attr2",
-      VariableNotFoundError),
+      "Cost"),
     strlist ("twohops_attr1",
       "twohops_attr2",
       "twohops_attr3"));
@@ -210,18 +208,16 @@ Twohops::R2Eca0Del (Ptr<Tuple> link)
     strlist ("onehop_attr2", "onehop_attr1"),
     strlist ("link_attr2", "link_attr1"));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
+  result->Assign (Assignor::New ("Cost",
+    Operation::New (RN_PLUS,
       VarExpr::New ("link_attr3"),
-      Operation::New (RN_PLUS,
-        VarExpr::New ("link_attr3"),
-        VarExpr::New ("onehop_attr3")))));
+      VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
     TWOHOPS,
     strlist ("link_attr1",
       "link_attr2",
-      VariableNotFoundError),
+      "Cost"),
     strlist ("twohops_attr1",
       "twohops_attr2",
       "twohops_attr3"));
@@ -241,18 +237,16 @@ Twohops::R2Eca1Ins (Ptr<Tuple> onehop)
     strlist ("link_attr2", "link_attr1"),
     strlist ("onehop_attr2", "onehop_attr1"));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
+  result->Assign (Assignor::New ("Cost",
+    Operation::New (RN_PLUS,
       VarExpr::New ("link_attr3"),
-      Operation::New (RN_PLUS,
-        VarExpr::New ("link_attr3"),
-        VarExpr::New ("onehop_attr3")))));
+      VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
     TWOHOPS,
     strlist ("onehop_attr1",
       "onehop_attr2",
-      VariableNotFoundError),
+      "Cost"),
     strlist ("twohops_attr1",
       "twohops_attr2",
       "twohops_attr3"));
@@ -272,18 +266,16 @@ Twohops::R2Eca1Del (Ptr<Tuple> onehop)
     strlist ("link_attr2", "link_attr1"),
     strlist ("onehop_attr2", "onehop_attr1"));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
+  result->Assign (Assignor::New ("Cost",
+    Operation::New (RN_PLUS,
       VarExpr::New ("link_attr3"),
-      Operation::New (RN_PLUS,
-        VarExpr::New ("link_attr3"),
-        VarExpr::New ("onehop_attr3")))));
+      VarExpr::New ("onehop_attr3"))));
 
   result = result->Project (
     TWOHOPS,
     strlist ("onehop_attr1",
       "onehop_attr2",
-      VariableNotFoundError),
+      "Cost"),
     strlist ("twohops_attr1",
       "twohops_attr2",
       "twohops_attr3"));
